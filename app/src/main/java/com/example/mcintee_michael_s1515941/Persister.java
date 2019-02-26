@@ -3,6 +3,16 @@ package com.example.mcintee_michael_s1515941;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * The persister class is created to be a parcelable object which holds all child channel
+ * and items to be persisted across intents. We can package it in intents which is useful as
+ * when orientation/activity changes take place old activities are either paused or destroyed.
+ * @author michaelmcintee
+ * @version 1.0
+ * @see Parcelable
+ * StudentID - S1515941
+ * Programme - BSc SDfB
+ */
 public class Persister implements Parcelable {
     private Channel channel = new Channel();
 

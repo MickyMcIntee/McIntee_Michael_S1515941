@@ -18,6 +18,16 @@ import java.io.StringReader;
 import java.net.URL;
 import java.net.URLConnection;
 
+/**
+ * The reloader class creates a new service which exists independent of the activities. This means that
+ * if not correctly handled in on pause and on resume the broadcast listener and the service can
+ * continue to run in the background.
+ * @author michaelmcintee
+ * @version 1.0
+ * @see Service
+ * StudentID - S1515941
+ * Programme - BSc SDfB
+ */
 public class Reloader extends Service {
 
     private static final String TAG = "Reloader";

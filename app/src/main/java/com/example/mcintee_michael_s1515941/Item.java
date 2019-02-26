@@ -6,6 +6,15 @@ import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.Objects;
 
+/**
+ * The item class is a blueprint which objects are made from to hold info on 1 individual earthquake.
+ * It is used to hold the info in a complex data structure to mirror the real world.
+ * @author michaelmcintee
+ * @version 1.0
+ * @see java.io.Serializable
+ * StudentID - S1515941
+ * Programme - BSc SDfB
+ */
 public class Item implements Serializable {
     private String title;
     private String description;

@@ -23,6 +23,18 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+/**
+ * The map activity is used to update and hold the map and display it to the user.
+ * When retrieving the map it does it in Async method, and a second thread is created to query
+ * if the map is ready before applying the points.
+ * @author michaelmcintee
+ * @version 1.0
+ * @see java.io.Serializable
+ * @see OnMapReadyCallback
+ * @see FragmentActivity
+ * StudentID - S1515941
+ * Programme - BSc SDfB
+ */
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;

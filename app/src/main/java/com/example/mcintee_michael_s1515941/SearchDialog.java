@@ -26,6 +26,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * The search dialog class is a custom dialog box using the dialog fragment superclass. This allows
+ * something that appears to be a dialog pop up in front of our main activity but the fragment
+ * itself can still raise dialogs. This had to be done as we want the date fields of this activity
+ * to be date picker dialogs which are not possible if this itself was a dialog and not a fragment.
+ * @author michaelmcintee
+ * @version 1.0
+ * @see DialogFragment
+ * StudentID - S1515941
+ * Programme - BSc SDfB
+ */
 public class SearchDialog extends DialogFragment {
     private Spinner category;
     private EditText origDateFrom;

@@ -36,6 +36,18 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This is the search results activity and it is used when the user enters a filter criteria, it has a spinner
+ * to aid selection in a compact way and also has a scroll view for information and a map fragment to show
+ * the selected map. In this a map uses an async get task so a loop on a separate thread is required to stop
+ * map processing until the map is loaded then perform the actions on the main UI thread as map tasks
+ * must be done on main.
+ * @author michaelmcintee
+ * @version 1.0
+ * @see OnMapReadyCallback
+ * StudentID - S1515941
+ * Programme - BSc SDfB
+ */
 public class SearchResults extends AppCompatActivity implements OnMapReadyCallback {
 
     private Intent in;
