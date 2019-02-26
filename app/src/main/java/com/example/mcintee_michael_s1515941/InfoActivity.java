@@ -12,7 +12,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * The info activity class is the class which displays more information about the selected earthquake. It's the java code which runs on the back of the activity.
+ * The info activity class is a class which displays information around the selected earthquake at
+ * a glance.
+ * @author michaelmcintee
+ * @version 1.0
+ * StudentID - S1515941
+ * Programme - BSc SDfB
  */
 public class InfoActivity extends AppCompatActivity {
 
