@@ -79,6 +79,7 @@ public class ListDataActivity extends AppCompatActivity {
     private IntentFilter ifi;
     private ImageDownloader idd;
     private Bitmap image;
+    private Thread t;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,13 +156,26 @@ public class ListDataActivity extends AppCompatActivity {
         idd = new ImageDownloader(channel.getImage().getURL());
         Thread tt = new Thread(idd);
         tt.start();
-        try {
-            tt.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
-        imageView.setImageBitmap(image);
+        t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(image == null) {
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        imageView.setImageBitmap(image);
+                    }
+                });
+            }
+        });
+        t.start();
 
         searchButton = findViewById(R.id.searchIcon);
         searchButton.setOnClickListener(new View.OnClickListener() {

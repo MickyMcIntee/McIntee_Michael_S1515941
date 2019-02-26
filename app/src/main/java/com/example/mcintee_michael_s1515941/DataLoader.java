@@ -53,9 +53,13 @@ public class DataLoader extends AppCompatActivity {
     public Channel getLoadedChannel() {
         Thread t = new Thread(new Task(urlSource));     //Create new thread
         t.start();                                      //Start the thread
-        try { t.join(); }                               //Try to ensure the thread is complete before carrying on
-        catch(InterruptedException e)                   //Catch interruptions to this waiting.
-        {e.printStackTrace();}                          //If there's an error print the stack trace.
+        while(channel == null) {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         return channel;                                 //Return the populated channel object.
     }
 

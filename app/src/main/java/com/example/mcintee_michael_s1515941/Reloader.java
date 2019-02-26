@@ -3,8 +3,6 @@ package com.example.mcintee_michael_s1515941;
 import android.app.Service;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
