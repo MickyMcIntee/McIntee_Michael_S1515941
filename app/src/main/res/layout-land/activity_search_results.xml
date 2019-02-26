@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:background="@color/colorPastelDarker"
+    tools:context=".SearchResults">
+    <LinearLayout
+        android:id="@+id/spinSelector"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_margin="3dp"
+        android:background="@drawable/scrollborder"
+        android:padding="4dp"
+        android:layout_height="wrap_content">
+        <Spinner
+            android:id="@+id/selectRecord"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:popupBackground="@color/colorPastelBG"
+            android:layout_weight="1"
+            android:spinnerMode="dropdown"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="0.50"
+            android:layout_margin="3dp"
+            android:background="@drawable/scrollborder"
+            android:layout_height="match_parent"
+            android:padding="5dp">
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:id="@+id/showInfo"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_marginTop="3dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <View style="@style/Rule" />
+                    <TextView
+                        android:id="@+id/link"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <View style="@style/Rule" />
+                    <TextView
+                        android:id="@+id/cat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <View style="@style/Rule" />
+                    <TextView
+                        android:id="@+id/lat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <View style="@style/Rule" />
+                    <TextView
+                        android:id="@+id/lon"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <View style="@style/Rule" />
+                    <TextView
+                        android:id="@+id/origin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <View style="@style/Rule" />
+                    <TextView
+                        android:id="@+id/loc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <View style="@style/Rule" />
+                    <TextView
+                        android:id="@+id/mag"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <View style="@style/Rule" />
+                    <TextView
+                        android:id="@+id/dep"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/showOnMap"
+            android:layout_weight="0.50"
+            android:layout_marginTop="3dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+            <fragment
+                android:id="@+id/mapInfo"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_margin="5dp"
+                android:layout_height="260dp"
+                />
+            <Button
+                android:id="@+id/back"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="@string/mainscreen"
+                android:background="@drawable/button"
+                android:layout_margin="3dp"
+                android:textAppearance="@style/Font"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

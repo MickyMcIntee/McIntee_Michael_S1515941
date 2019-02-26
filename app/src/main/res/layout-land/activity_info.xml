@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".InfoActivity"
+    android:background="@color/colorPastelDarker"
+    android:padding="3dp">
+    <ScrollView
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_weight="0.30"
+        android:padding="5dp"
+        android:background="@drawable/scrollborder">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/title"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Font"
+                android:layout_width="match_parent"/>
+            <View style="@style/Rule" android:layout_below="@+id/title"/>
+            <TextView
+                android:id="@+id/description"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:textAppearance="@style/Font"
+                android:layout_below="@+id/title"/>
+            <View style="@style/Rule" android:layout_below="@+id/description"/>
+            <TextView
+                android:id="@+id/link"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Font"
+                android:layout_width="match_parent"
+                android:layout_below="@+id/description"/>
+            <View style="@style/Rule" android:layout_below="@+id/link"/>
+            <TextView
+                android:id="@+id/pubDate"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Font"
+                android:layout_width="match_parent"
+                android:layout_below="@+id/link"/>
+            <View style="@style/Rule" android:layout_below="@+id/pubDate"/>
+            <TextView
+                android:id="@+id/category"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:textAppearance="@style/Font"
+                android:layout_below="@+id/pubDate"/>
+            <View style="@style/Rule" android:layout_below="@+id/category"/>
+            <TextView
+                android:id="@+id/lat"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:textAppearance="@style/Font"
+                android:layout_below="@+id/category"/>
+            <View style="@style/Rule" android:layout_below="@+id/lat"/>
+            <TextView
+                android:id="@+id/lon"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:textAppearance="@style/Font"
+                android:layout_below="@+id/lat"/>
+            <View style="@style/Rule" android:layout_below="@+id/lon"/>
+            <TextView
+                android:id="@+id/origDate"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:textAppearance="@style/Font"
+                android:layout_below="@+id/lon"/>
+            <View style="@style/Rule" android:layout_below="@+id/origDate"/>
+            <TextView
+                android:id="@+id/mag"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:textAppearance="@style/Font"
+                android:layout_below="@+id/origDate"/>
+            <View style="@style/Rule" android:layout_below="@+id/mag"/>
+            <TextView
+                android:id="@+id/dep"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:textAppearance="@style/Font"
+                android:layout_below="@+id/mag"/>
+            <View style="@style/Rule" android:layout_below="@+id/dep"/>
+            <TextView
+                android:id="@+id/loc"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:textAppearance="@style/Font"
+                android:layout_below="@+id/dep"/>
+            <View style="@style/Rule" android:layout_below="@+id/loc"/>
+        </RelativeLayout>
+    </ScrollView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.70"
+        android:orientation="vertical"
+        android:gravity="bottom"
+        android:padding="4dp">
+        <Button
+            android:id="@+id/mapView"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_weight="0.5"
+            android:textAppearance="@style/Font"
+            android:background="@drawable/button"
+            android:text="@string/viewmap"
+            android:layout_marginBottom="5dp"/>
+        <Button
+            android:id="@+id/back"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_width="match_parent"
+            android:background="@drawable/button"
+            android:textAppearance="@style/Font"
+            android:text="@string/mainscreen"
+            android:layout_marginBottom="5dp"/>
+    </LinearLayout>
+</LinearLayout>
