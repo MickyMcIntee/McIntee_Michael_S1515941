@@ -245,8 +245,6 @@ public class ListDataActivity extends AppCompatActivity {
             holder.addView(b);
             id++;
         }
-
-
     }
 
     @Override
@@ -254,11 +252,6 @@ public class ListDataActivity extends AppCompatActivity {
         super.onResume();
         runCalculations("fromResume");
         registerReceiver(rec,ifi);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle saveInstanceState) {
-        super.onSaveInstanceState(saveInstanceState);
     }
 
     @Override
