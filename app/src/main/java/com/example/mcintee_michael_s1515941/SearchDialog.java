@@ -53,20 +53,39 @@ public class SearchDialog extends DialogFragment {
     private Intent in;
     private Persister p;
 
+    /**
+     * Blank constructor as instance created is handled below.
+     */
     public SearchDialog() {
 
     }
 
+    /**
+     * The new instance method creates the fragment accepting the required fields that need to be used
+     * in the dialog like the persister to be searched and a title to be applied to the fragment.
+     * @param title The value of the title to be applied to the fragment.
+     * @param persister The value of the persister to be used in search.
+     * @return Return the object so that show can be called.
+     */
     public static SearchDialog newInstance(String title,Persister persister) {
-        SearchDialog myfragment = new SearchDialog();
-        Bundle args = new Bundle();
-        args.putString("title", title);
-        args.putSerializable("channel",persister.getChannel());
-        args.putParcelable("persister",persister);
-        myfragment.setArguments(args);
-        return myfragment;
+        SearchDialog myfragment = new SearchDialog(); //Create instance of the fragment.
+        Bundle args = new Bundle(); //Create a bundle of arguments.
+        args.putString("title", title); //Put title in the bundle.
+        args.putSerializable("channel",persister.getChannel()); //Put the channel in the bundle.
+        args.putParcelable("persister",persister);  //Put the persister in the bundle.
+        myfragment.setArguments(args); //Set arguments of the fragment to the populated bundle.
+        return myfragment; //Return the search dialog fragment with the arguments.
     }
 
+    /**
+     * On create view which is an method extension of the dialog fragment class this is responsible for inflating the view on
+     * the current activity. It requires an inlater, a container in which the view should be inflated on and a bundle
+     * of arguments.
+     * @param inflater The inflator object to inflate the fragment.
+     * @param container The container to hold the fragment.
+     * @param savedInstanceState The bundle of arguments.
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -74,14 +93,23 @@ public class SearchDialog extends DialogFragment {
         return view;
     }
 
+    /**
+     * The method which is called when the view has been created. It's an extension of the dialog fragment class
+     * and is responsible for making the connections between xml and java and also making any changes to the
+     * dialog and adding on click listeners.
+     * @param view The create view or dialog box.
+     * @param savedInstanceState The bundle of arguments.
+     */
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        view.setLayoutParams(new LinearLayout.LayoutParams(500,500,1));
-        String title = getArguments().getString("title", "Enter Search: ");
-        channel = (Channel) getArguments().getSerializable("channel");
-        p = getArguments().getParcelable("persister");
-        searchButton = view.findViewById(R.id.dialogButtonSearch);
+        view.setLayoutParams(new LinearLayout.LayoutParams(500,500,1)); //Set layout of dialog
+
+        String title = getArguments().getString("title", "Enter Search: "); //Get the text from arguments bundle.
+        channel = (Channel) getArguments().getSerializable("channel"); //Get the channel from arguments bundle.
+        p = getArguments().getParcelable("persister"); //Get persister from arguments bundle.
+
+        searchButton = view.findViewById(R.id.dialogButtonSearch); //Connect java to xml etc.
         backButton = view.findViewById(R.id.dialogButtonBack);
         category = view.findViewById(R.id.editCat);
         magnitude = view.findViewById(R.id.editMag);
@@ -89,6 +117,7 @@ public class SearchDialog extends DialogFragment {
         depth = view.findViewById(R.id.editDepth);
         edittitle = view.findViewById(R.id.editTitle);
 
+        //For each distinct item category of the channel.
         List<String> array = new ArrayList<>();
         for(Item i : channel.getItems()) {
 
@@ -96,20 +125,32 @@ public class SearchDialog extends DialogFragment {
                 array.add(i.getCategory());
             }
         }
+
+        //Create an adapter using the spin layout from xml to adjust style. Populate with distinct array.
         ArrayAdapter<String> adapter = new ArrayAdapter<>(super.getContext(),R.layout.spin, array);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        category.setAdapter(adapter);
+        category.setAdapter(adapter); //Set the spinners adapter to the newly created adapter.
 
-        backButton.setOnClickListener(new View.OnClickListener() {
+        backButton.setOnClickListener(new View.OnClickListener() { //On back button click.
             @Override
             public void onClick(View v) {
-                SearchDialog.super.dismiss();
+                SearchDialog.super.dismiss(); //Dismiss the dialog.
             }
         });
 
-        cal = Calendar.getInstance();
+        //Set up calendars for date selection.
+        cal = Calendar.getInstance(); //Set to now.
         origDateFrom = view.findViewById(R.id.editOrigFrom);
+
         final DatePickerDialog.OnDateSetListener adf = new DatePickerDialog.OnDateSetListener() {
+
+            /**
+             * On date set listener which kicks off when a date is selected from the picker.
+             * @param view The view to be adjusted.
+             * @param year The year value.
+             * @param month The month value.
+             * @param dayOfMonth The day of month picker.
+             */
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 cal.set(Calendar.YEAR, year);
@@ -120,6 +161,13 @@ public class SearchDialog extends DialogFragment {
         };
 
         origDateFrom.setOnClickListener(new View.OnClickListener() {
+
+            /**
+             * The onclick event has a calling view but as this is anonymous we don't use it.
+             * This opens a date picker dialog with the on date set listener above. This sets the value of the
+             * picker to the value of the calendar which is set to now.
+             * @param v The view in which the event was raised.
+             */
             @Override
             public void onClick(View v) {
                 DatePickerDialog dp = new DatePickerDialog(getActivity(),adf,cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH));
@@ -129,6 +177,14 @@ public class SearchDialog extends DialogFragment {
 
         origDateTo = view.findViewById(R.id.editOrigTo);
         final DatePickerDialog.OnDateSetListener adt = new DatePickerDialog.OnDateSetListener() {
+
+            /**
+             * On date set listener which kicks off when a date is selected from the picker.
+             * @param view The view to be adjusted.
+             * @param year The year value.
+             * @param month The month value.
+             * @param dayOfMonth The day of month picker.
+             */
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 cal.set(Calendar.YEAR, year);
@@ -139,6 +195,13 @@ public class SearchDialog extends DialogFragment {
         };
 
         origDateTo.setOnClickListener(new View.OnClickListener() {
+
+            /**
+             * The onclick event has a calling view but as this is anonymous we don't use it.
+             * This opens a date picker dialog with the on date set listener above. This sets the value of the
+             * picker to the value of the calendar which is set to now.
+             * @param v The view in which the event was raised.
+             */
             @Override
             public void onClick(View v) {
                 DatePickerDialog dp = new DatePickerDialog(getActivity(),adt,cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH));
@@ -147,6 +210,15 @@ public class SearchDialog extends DialogFragment {
         });
 
         searchButton.setOnClickListener(new View.OnClickListener() {
+
+            /**
+             * The onclick event has a calling view but as this is anonymous we don't use it.
+             * This runs the pipe and filter to filter out data based on the search criteria entered
+             * once pipe filter is complete the filtered channel is checked for data. If there is none
+             * raise toast else move to a new search results activity using the package of the filtered channel
+             * and the full persister.
+             * @param v The view in which the event was raised.
+             */
             @Override
             public void onClick(View v) {
                 filchannel = pipeFilter();
@@ -160,33 +232,51 @@ public class SearchDialog extends DialogFragment {
                 }
             }
         });
-        getDialog().setTitle(title);
-        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+        getDialog().setTitle(title); //Get the dialog and set the title to the value of title.
+        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); //Set the background to invisible to hide the dialog bg and to create custom background in xml.
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE); //Raise the keyboard on the dialog on selections.
     }
 
+    /**
+     * Updates the date of the origin date from text to the value of the calendar set by the date
+     * picker selection.
+     */
     public void updateFormFrom() {
         String myFormat = "E, dd MMM yyyy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.UK);
         origDateFrom.setText(sdf.format(cal.getTime()));
     }
 
+    /**
+     * Updates the date of the origin date to text to the value of the calendar set by the date
+     * picker selection.
+     */
     public void updateFormTo() {
         String myFormat = "E, dd MMM yyyy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.UK);
         origDateTo.setText(sdf.format(cal.getTime()));
     }
 
+    /**
+     * The pipe and filter method takes each item from a clone of the channels item linked list and puts
+     * it through a series of not checks, where if any are not the inputted search terms the check
+     * is set to false for the item and it is not put in to the to remove list which will be the list
+     * of elements that meet the criteria.
+     * @return
+     */
     public Channel pipeFilter() {
         Channel filterc = new Channel();
         filterc.setItems((LinkedList<Item>) channel.getItems().clone());
 
         LinkedList<Item> toRemove = new LinkedList<>();
+
+        //For each item each check follows the same sort of structure.
         for(Item i : filterc.getItems()) {
-            boolean check = true;
-            if(!category.getSelectedItem().toString().isEmpty()) {
-                if (!i.getCategory().contains(category.getSelectedItem().toString())) {
-                    check = false;
+            boolean check = true; //Set the items check to true, put in list.
+            if(!category.getSelectedItem().toString().isEmpty()) { //If there is no selection on this field then move on.
+                if (!i.getCategory().contains(category.getSelectedItem().toString())) { //If there is a selection and the items category is not equal to the input category then
+                    check = false; //Set check to false meaning this element does not meet the criteria.
                 }
             }
 
@@ -228,6 +318,7 @@ public class SearchDialog extends DialogFragment {
                 }
             }
 
+            //After checking all if the check is still true the item meets the criteria and should be brought.
             if(check) {
                 toRemove.add(i);
             }
@@ -237,6 +328,11 @@ public class SearchDialog extends DialogFragment {
         return filterc;
     }
 
+    /**
+     * The parse date function which takes a string and turns it in to a date object.
+     * @param dateString accept a string date
+     * @return return the date object of the string.
+     */
     private Date parseDate(String dateString) {
         try {
             return new SimpleDateFormat("E, dd MMM yyyy hh:mm:ss").parse(dateString);

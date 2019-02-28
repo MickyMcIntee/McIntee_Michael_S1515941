@@ -36,28 +36,55 @@ public class Reloader extends Service {
     private String urlSource="http://quakes.bgs.ac.uk/feeds/MhSeismology.xml";
     private Persister p;
 
+    /**
+     * The is instance created method is checked when creating a new object. If the instance does not exist
+     * it will allow creation.
+     * @return The boolean value if instance is not null.
+     */
     public static boolean isInstanceCreated() {
         return instance != null;
     }
 
+    /**
+     * Part of the service extension and binds the service to the intent.
+     * @param intent The intent the service should be bound to.
+     * @return an IBinder object describing the bind.
+     */
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
 
+    /**
+     * The on create method which is part of the activity lifecycle which is called when the activity
+     * is created.
+     */
     @Override
     public void onCreate() {
         super.onCreate();
-        instance = this;
-        globalIn = new Intent();
-        globalIn.setAction(BROADCASTING);
+        instance = this;                    //Set the instance.
+        globalIn = new Intent();            //Set the intent to a global intent.
+        globalIn.setAction(BROADCASTING);   //Set the channel of the intent to the value of broadcasting.
     }
 
+    /**
+     * When destroyed reset the instance to null. Means thats only 1 can exist at a time and that
+     * 1 is open to a new creation based on the last one being destroyed.
+     */
     @Override
     public void onDestroy() {
         instance = null;
     }
 
+    /**
+     * The on start command is an extension of service and is responsible for creating the new task
+     * object which is a background asynchronous task to perform refreshes. This is a nest class
+     * described below.
+     * @param intent The intent the command is being started against.
+     * @param flags The flags for settings of the intent.
+     * @param startId The id of the started service.
+     * @return return an integer of successful start.
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         new Task().execute();
@@ -65,19 +92,35 @@ public class Reloader extends Service {
         return super.onStartCommand(intent,flags,startId);
     }
 
-    private class Task extends AsyncTask<String, Integer, Long>{
-        final Object lock = new Object();
+    /**
+     * The task class extends AsyncTask and is used to perform the reloading of data in the background using
+     * a service. When the reload is complete it sends a broadcast that broadcast receivers pick up and
+     * depending on what activity is open the receivers will reload the data or raise a toast informing
+     * of updates.
+     */
+    private class Task extends AsyncTask<String, Integer, Long>{ //<parameters of the task, progress value of the task, Result of the task>
 
+        final Object lock = new Object(); //Create new lock of type object.
+
+        /**
+         * Extension of the asynctask class this is the method that will run in the background.
+         * It has a long value which is the result of the background task, it uses the strings
+         * parameters which isn't in use here.
+         * @param strings The value of parameters for the background task.
+         * @return The long value of result.
+         */
         @Override
         public Long doInBackground(String... strings) {
-            while (true) {
+            while (true) { //Forever (true always true).
+
+                //The following code does the same as the initial load in DataLoader but it is done in the background.
                 URL aurl;
                 URLConnection yc;
                 BufferedReader in = null;
                 String inputLine = "";
                 result = "";
 
-
+                //Load all lines of data from the input stream using buffers.
                 Log.e("MyTag", "in run");
                 try {
                     Log.e("MyTag", "in try");
@@ -99,6 +142,7 @@ public class Reloader extends Service {
                 Channel myChannel = null;
                 Image myImage = null;
 
+                //Parse the data using a pull parser as described in the DataLoader
                 try {
 
                     XmlPullParserFactory myFact = XmlPullParserFactory.newInstance(); //Create instance
@@ -171,10 +215,10 @@ public class Reloader extends Service {
                 }
                 p = new Persister(myChannel);
                 globalIn.putExtra("persister", p);
-                sendBroadcast(globalIn);
-                synchronized (this) {
+                sendBroadcast(globalIn); //Send broadcast of updated data for receivers to pick up, they get the data from the parcelled persister in the global intenet.
+                synchronized (this) { //Using the lock lock the object and wait, this means nothing else can work on the object which is required by wait.
                         try {
-                            this.wait(300000);
+                            this.wait(300000); //Wait 5 mins before restarting the download and parse.
                         }
                         catch (InterruptedException e) { e.printStackTrace(); }
                 }

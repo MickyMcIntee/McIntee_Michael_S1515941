@@ -422,20 +422,24 @@ public class ListDataActivity extends AppCompatActivity {
         int deepest = 0;            //Set placeholder values.
         int shallowest = 0;         //Set placeholder values.
 
-        LinkedList<Item> filteredList = new LinkedList<>();
+        LinkedList<Item> filteredList = new LinkedList<>(); //Create new list to hold items.
 
         for(Item i : channel.getItems()) {
             if((i.getPubDate().after(parseDate(fromDate.getText().toString()))) && (i.getPubDate().before(parseDate(toDate.getText().toString())))) {
-                filteredList.add(i);
+                filteredList.add(i); //Add to the filtered list if all records which fall in the date range provided.
             }
         }
 
+        //If there is no elements in the filteredList then raise toast informing no records.
         if(filteredList.size() == 0) {
             Toast.makeText(ListDataActivity.this,getResources().getString(R.string.nodata),Toast.LENGTH_SHORT).show();
             return;
         }
 
+        //For each item in the list.
         for(Item i : filteredList) {
+
+            //For the first item set all the placeholders to its values.
             if(counter == 0) {
                 toplat = i.getLat();
                 greatmag = i.getMagnitude();
@@ -445,83 +449,122 @@ public class ListDataActivity extends AppCompatActivity {
                 deepest = i.getDepth();
                 shallowest = i.getDepth();
             }
+
+            //If the item is greater than the top latitude replace value else remain.
             if(i.getLat() > toplat) {
                 northid = counter;
                 toplat = i.getLat();
             }
+
+            //If item is greater than min latitude replace value else remain.
             if(i.getLat() < minlat) {
                 southid = counter;
                 minlat = i.getLat();
             }
+
+            //If the item is greater than the top longitude replace value else remain.
             if(i.getLon() > toplon) {
                 eastid = counter;
                 toplon = i.getLon();
             }
+
+            //If the item is less than the min longitude replace value else remain.
             if(i.getLon() < minlon) {
                 westid = counter;
                 minlon = i.getLon();
             }
+
+            //If the item is greater than the current mag then replace else remain.
             if(greatmag < i.getMagnitude()) {
                 largemagid = counter;
                 greatmag = i.getMagnitude();
             }
+
+            //If the item is greater than the deepest depth then replace else remain.
             if(deepest < i.getDepth()) {
                 deepid = counter;
                 deepest = i.getDepth();
             }
+
+            //If the item is less than the shallowest depth then replace else remain.
             if(shallowest > i.getDepth()) {
                 shallowid = counter;
                 shallowest = i.getDepth();
             }
+
+            //Increment the counter which will correspond with the ID of each item.
             counter++;
         }
 
-        northernly.setText(getResources().getString(R.string.northernmost,toplat,filteredList.get(northid).getTitle()));
-        southernly.setText(getResources().getString(R.string.southernmost, minlat, filteredList.get(southid).getTitle()));
-        westernly.setText(getResources().getString(R.string.westernmost,toplon, filteredList.get(westid).getTitle()));
+        northernly.setText(getResources().getString(R.string.northernmost,toplat,filteredList.get(northid).getTitle())); //Print formatted string.
+        southernly.setText(getResources().getString(R.string.southernmost, minlat, filteredList.get(southid).getTitle())); //Print formatted string.
+        westernly.setText(getResources().getString(R.string.westernmost,toplon, filteredList.get(westid).getTitle()));  //etc.
         easternly.setText(getResources().getString(R.string.easternmost,minlon,filteredList.get(eastid).getTitle()));
         deep.setText(getResources().getString(R.string.deepest, deepest , filteredList.get(deepid).getTitle()));
         shallow.setText(getResources().getString(R.string.shallow,shallowest,filteredList.get(shallowid).getTitle()));
         largemag.setText(getResources().getString(R.string.largemag, greatmag,filteredList.get(largemagid).getTitle()));
     }
 
-
+    /**
+     * The parse date function which takes a string and turns it in to a date object.
+     * @param dateString accept a string date
+     * @return return the date object of the string.
+     */
     private Date parseDate(String dateString) {
         try {
-            return new SimpleDateFormat("E, dd MMM yyyy").parse(dateString);
+            return new SimpleDateFormat("E, dd MMM yyyy").parse(dateString); //Parse date object in the provided format.
         } catch (ParseException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-
+    /**
+     * The image downloader nested class is responsible for being a runnable used to download images
+     * it would be much better practice to download the picture and apply it the image viewer source
+     * by reference to the images drawable however I've done it this way to show another version
+     * of a network task by using a runnable. I used an ASync task elsewhere to, showing how that
+     * works.
+     */
     private class ImageDownloader implements Runnable {
-        private String link;
+        private String link;    //Link to the file to download.
 
+        /**
+         * Constructor which accepts the link and sets the link of the objects value to the passed in
+         * parameter.
+         * @param link the link to the image to be downloaded.
+         */
         public ImageDownloader(String link) {
             this.link = link;
         }
 
-
+        /**
+         * The runnable run method which kicks of when the runnable is used in a thread.start. This
+         * run sets the value of the image to the returned bitmap from the load image method.
+         */
         public void run() {
             image = loadImage(link);
         }
 
-
+        /**
+         * The load image method opens an input stream using an HTTP connection to pull the data from the
+         * stream and decode it to a bitmap image.
+         * @param link The link to the image to be downloaded in the stream.
+         * @return The bitmap which is the image.
+         */
         public Bitmap loadImage(String link) {
-            Bitmap channelLogo = null;
-            InputStream stream;
+            Bitmap channelLogo = null;      //Create new bitmap.
+            InputStream stream;             //Create input stream.
             try {
-                HttpURLConnection con = (HttpURLConnection) new URL(link).openConnection();
-                con.setDoInput(true);
-                con.connect();
-                stream = con.getInputStream();
-                channelLogo = BitmapFactory.decodeStream(stream);
+                HttpURLConnection con = (HttpURLConnection) new URL(link).openConnection(); //Make a URL connection and open it.
+                con.setDoInput(true);   //Set the connection to allow input.
+                con.connect();          //Connect.
+                stream = con.getInputStream();  //Get the input stream from the connection.
+                channelLogo = BitmapFactory.decodeStream(stream);   //Create a bitmap from the stream.
             } catch (Exception e) {
-                Log.e("MyTag",e.toString());
+                Log.e("MyTag",e.toString());        //Print error if broke.
             }
-            return channelLogo;
+            return channelLogo; //Return the populated bit map to be applied to the image parameter which in turn is applied to the image view.
         }
     }
 
@@ -544,7 +587,16 @@ public class ListDataActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * The create context menu method is a required method as part of the extended class. It is
+     * responsible for populating the context menu when it is created. It is called when the menu is created
+     * and puts the information for selection in the menu.
+     * This one populates options for when long button press is clicked, show the id of clicked and then add options
+     * for straight to info screen or go to map screen.
+     * @param menu The menu in question.
+     * @param v The view the menu is raised against.
+     * @param menuInfo  The information of the menu.
+     */
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -555,16 +607,23 @@ public class ListDataActivity extends AppCompatActivity {
         menu.add(0, v.getId(), 0, getResources().getString(R.string.viewmap));
     }
 
-
+    /**
+     * On selected item listener is also required by the extending class and is what is called when a
+     * menu item context option is selected. In this case I've not done it anonymously I've ran a
+     * check in the form of an if which sees if the menu item selected matches either info screen
+     * or view on map and runs the required intent depending on which.
+     * @param item the menu item clicked (selected).
+     * @return return item as been selected.
+     */
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         if(item.getTitle().toString().equals("Info Screen")) {
-            in = new Intent(this,InfoActivity.class);
-            in.putExtra("ItemID",item.getItemId());
-            in.putExtra("persister",p);
-            startActivity(in);
+            in = new Intent(this,InfoActivity.class); //Set up next activity
+            in.putExtra("ItemID",item.getItemId());           //Apply selected item to be read by next activity.
+            in.putExtra("persister",p);                       //Persister with data to pull item from.
+            startActivity(in);                                      //Go to the activity using intent.
         } else if(item.getTitle().toString().equals("View on Map")) {
-            in = new Intent(this,MapActivity.class);
+            in = new Intent(this,MapActivity.class);    //As above...
             in.putExtra("ItemID",item.getItemId());
             in.putExtra("persister",p);
             startActivity(in);
