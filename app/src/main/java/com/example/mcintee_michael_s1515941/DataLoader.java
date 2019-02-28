@@ -55,7 +55,7 @@ public class DataLoader extends AppCompatActivity {
         t.start();                                      //Start the thread
         while(channel == null) {
             try {
-                Thread.sleep(2000);
+                Thread.sleep(2000);              //sleep for 2 seconds then recheck if the channel is populated.
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -173,7 +173,7 @@ public class DataLoader extends AppCompatActivity {
                         } else if (parser.getName().equalsIgnoreCase("title") && currentType == "item") {
                             item.setTitle(parser.nextText());
                         } else if (parser.getName().equalsIgnoreCase("description") && currentType == "item") {
-                            item.setDesctription(parser.nextText());
+                            item.setDescription(parser.nextText());
                         } else if (parser.getName().equalsIgnoreCase("link") && currentType == "item") {
                             item.setLink(parser.nextText());
                         } else if (parser.getName().equalsIgnoreCase("pubDate")) {

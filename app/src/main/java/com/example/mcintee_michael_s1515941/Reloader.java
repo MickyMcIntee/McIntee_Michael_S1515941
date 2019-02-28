@@ -138,7 +138,7 @@ public class Reloader extends Service {
                             } else if (parser.getName().equalsIgnoreCase("title") && currentType == "item") {
                                 item.setTitle(parser.nextText());
                             } else if (parser.getName().equalsIgnoreCase("description") && currentType == "item") {
-                                item.setDesctription(parser.nextText());
+                                item.setDescription(parser.nextText());
                             } else if (parser.getName().equalsIgnoreCase("link") && currentType == "item") {
                                 item.setLink(parser.nextText());
                             } else if (parser.getName().equalsIgnoreCase("pubDate")) {

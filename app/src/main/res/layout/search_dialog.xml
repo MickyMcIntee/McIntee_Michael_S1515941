@@ -32,7 +32,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.75"
-            android:text="@string/location"
+            android:text="@string/lablocation"
             android:textAppearance="@style/Font"
             android:gravity="right"/>
         <EditText
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.75"
             android:textAppearance="@style/Font"
-            android:text="@string/title"
+            android:text="@string/labtitle"
             android:gravity="right"/>
         <EditText
             android:id="@+id/editTitle"
@@ -133,7 +133,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.75"
-            android:text="@string/category"
+            android:text="@string/labcategory"
             android:textAppearance="@style/Font"
             android:gravity="right"/>
         <FrameLayout android:layout_width="0dp"
@@ -166,7 +166,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.75"
             android:textAppearance="@style/Font"
-            android:text="@string/depth"
+            android:text="@string/labdepth"
             android:gravity="right"/>
         <EditText
             android:id="@+id/editDepth"
@@ -191,7 +191,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="@style/Font"
             android:layout_weight="0.75"
-            android:text="@string/magnitude"
+            android:text="@string/labmagnitude"
             android:gravity="right"/>
         <EditText
             android:id="@+id/editMag"

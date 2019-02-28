@@ -51,7 +51,7 @@ import java.util.List;
 public class SearchResults extends AppCompatActivity implements OnMapReadyCallback {
 
     private Intent in;
-    private SearchResults.MyReciever rec;
+    private SearchResults.MyReceiver rec;
     private IntentFilter ifi;
     private Spinner selectRecord;
     private Channel channel;
@@ -121,47 +121,47 @@ public class SearchResults extends AppCompatActivity implements OnMapReadyCallba
                 thread.start();
 
                 TextView title = findViewById(R.id.title);
-                title.setText(Html.fromHtml("<b>Title: </b>" + selectedItem.getTitle()));
+                title.setText(getResources().getString(R.string.title,selectedItem.getTitle()));
                 title.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 title.setTextSize(TypedValue.COMPLEX_UNIT_DIP,20);
 
                 TextView link = findViewById(R.id.link);
-                link.setText(Html.fromHtml("<b>Link: </b>" + selectedItem.getLink()));
+                link.setText(getResources().getString(R.string.link,selectedItem.getLink()));
                 link.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 link.setTextSize(TypedValue.COMPLEX_UNIT_DIP,20);
 
                 TextView cat = findViewById(R.id.cat);
-                cat.setText(Html.fromHtml("<b>Category: </b>" + selectedItem.getCategory()));
+                cat.setText(getResources().getString(R.string.category, selectedItem.getCategory()));
                 cat.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 cat.setTextSize(TypedValue.COMPLEX_UNIT_DIP,20);
 
                 TextView lat = findViewById(R.id.lat);
-                lat.setText(Html.fromHtml("<b>Latitude: </b>" + Double.toString(selectedItem.getLat())));
+                lat.setText(getResources().getString(R.string.lat, selectedItem.getLat()));
                 lat.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 lat.setTextSize(TypedValue.COMPLEX_UNIT_DIP,20);
 
                 TextView lon = findViewById(R.id.lon);
-                lon.setText(Html.fromHtml("<b>Longitude: </b>" + Double.toString(selectedItem.getLon())));
+                lon.setText(getResources().getString(R.string.lon, selectedItem.getLon()));
                 lon.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 lon.setTextSize(TypedValue.COMPLEX_UNIT_DIP,20);
 
                 TextView origin = findViewById(R.id.origin);
-                origin.setText(Html.fromHtml("<b>Origin Date: </b>" + selectedItem.getOriginDate().toString()));
+                origin.setText(getResources().getString(R.string.orig, selectedItem.getOriginDate().toString()));
                 origin.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 origin.setTextSize(TypedValue.COMPLEX_UNIT_DIP,20);
 
                 TextView loc = findViewById(R.id.loc);
-                loc.setText(Html.fromHtml("<b>Location: </b>" + selectedItem.getLocation()));
+                loc.setText(getResources().getString(R.string.location, selectedItem.getLocation()));
                 loc.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 loc.setTextSize(TypedValue.COMPLEX_UNIT_DIP,20);
 
                 TextView mag = findViewById(R.id.mag);
-                mag.setText(Html.fromHtml("<b>Magnitude: </b>" + Double.toString(selectedItem.getMagnitude())));
+                mag.setText(getResources().getString(R.string.magnitude,selectedItem.getMagnitude()));
                 mag.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 mag.setTextSize(TypedValue.COMPLEX_UNIT_DIP,20);
 
                 TextView dep = findViewById(R.id.dep);
-                dep.setText(Html.fromHtml("<b>Depth: </b>" + Integer.toString(selectedItem.getDepth()) + "km"));
+                dep.setText(getResources().getString(R.string.depth, selectedItem.getDepth(),"km"));
                 dep.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 dep.setTextSize(TypedValue.COMPLEX_UNIT_DIP,20);
             }
@@ -183,7 +183,7 @@ public class SearchResults extends AppCompatActivity implements OnMapReadyCallba
             }
         });
 
-        rec = new SearchResults.MyReciever();
+        rec = new SearchResults.MyReceiver();
         ifi = new IntentFilter("com.example.mcintee_michael_s1515941.RefreshData");
         registerReceiver(rec,ifi);
     }
@@ -208,7 +208,18 @@ public class SearchResults extends AppCompatActivity implements OnMapReadyCallba
         registerReceiver(rec,ifi);
     }
 
-    public class MyReciever extends BroadcastReceiver {
+    /**
+     * The MyReceiver class is responsible for running as a broadcast receiver and defines
+     * what should be done when a broadcast from the service is received on the specified channel.
+     * @see android.content.BroadcastReceiver
+     */
+    public class MyReceiver extends BroadcastReceiver {
+
+        /**
+         * On receive method called when the broadcast receives a broadcast from the service.
+         * @param context the context in which the broadcast was received.
+         * @param intent the intent in which the broadcast is received.
+         */
         @Override
         public void onReceive(Context context, Intent intent) {
             Toast.makeText(SearchResults.this,"The channel has been refreshed. Please return to the main menu to receive updates.",Toast.LENGTH_SHORT).show();

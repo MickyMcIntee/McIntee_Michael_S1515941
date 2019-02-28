@@ -154,6 +154,13 @@ public class Channel implements Serializable {
 
     public void removeItem(int index) { items.remove(index); }
 
+    /**
+     * Overrides equality check to make sure each element of the object is equal to the values of the passed
+     * in channel. This means that equality is tested differently from the default of is this actually
+     * that and not is this like that.
+     * @param o the object to compare with the current called object.
+     * @return a boolean value of true or false.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -168,11 +175,6 @@ public class Channel implements Serializable {
                 Objects.equals(items, channel.items);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(title, link, description, language, lastBuildDate, image, items);
-    }
-
     /**
      * The parse date function which takes a string and turns it in to a date object.
      * @param dateString accept a string date
@@ -180,10 +182,10 @@ public class Channel implements Serializable {
      */
     private Date parseDate(String dateString) {
         try {
-            return new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss").parse(dateString);
+            return new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss").parse(dateString); //Try to parse date in the provided format
         } catch (ParseException e) {
             e.printStackTrace();
-            return null;
+            return null; //If can't parse return a null date and print to stack trace.
         }
     }
 }

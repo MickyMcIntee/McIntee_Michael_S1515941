@@ -47,7 +47,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     LatLng area;
     LatLng origarea;
     SupportMapFragment mapFragment;
-    private MyReciever rec;
+    private MyReceiver rec;
     private IntentFilter ifi;
 
     @Override
@@ -73,7 +73,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        rec = new MyReciever();
+        rec = new MyReceiver();
         ifi = new IntentFilter("com.example.mcintee_michael_s1515941.RefreshData");
         registerReceiver(rec,ifi);
     }
@@ -83,10 +83,9 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
      * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
+     * we just add a marker for the relevant item, get a size for circles of all quakes
+     * based on the magnitude and plotting them all over the map. We move the camera to a point
+     * set the zoom of the item to 12 and stop movement of the camera, only zoom is allowed.
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -117,11 +116,13 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         mMap.getUiSettings().setScrollGesturesEnabled(false); //Disallow the user to deviate from the position of selected earth quake.
     }
 
+
     @Override
     public void onPause() {
         super.onPause();
         unregisterReceiver(rec);
     }
+
 
     @Override
     public void onResume() {
@@ -129,7 +130,18 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         registerReceiver(rec,ifi);
     }
 
-    public class MyReciever extends BroadcastReceiver {
+    /**
+     * The MyReceiver class is responsible for running as a broadcast receiver and defines
+     * what should be done when a broadcast from the service is received on the specified channel.
+     * @see android.content.BroadcastReceiver
+     */
+    public class MyReceiver extends BroadcastReceiver {
+
+        /**
+         * On Receive method called when the broadcast receives a broadcast from the service.
+         * @param context the context in which the broadcast was received.
+         * @param intent the intent in which the broadcast is received.
+         */
         @Override
         public void onReceive(Context context, Intent intent) {
             Toast.makeText(MapActivity.this,"The channel has been refreshed. Please return to the main menu to receive updates.",Toast.LENGTH_SHORT).show();
