@@ -64,6 +64,13 @@ public class SearchResults extends AppCompatActivity implements OnMapReadyCallba
     private Persister p;
     private LinearLayout info;
 
+    /**
+     * The onCreate method is what is first called when creating the activity and is used to set
+     * everything up, make connections to the xml GUI and in most cases perform any required design
+     * changes or adding things like listeners and stuff but not always.
+     * @param savedInstanceState The bundle passed when destroying and recreating the activity which is populated
+     *                           by onSaveInstanceState but I don't make use of it.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,42 +78,63 @@ public class SearchResults extends AppCompatActivity implements OnMapReadyCallba
 
         selectRecord = findViewById(R.id.selectRecord);
         info = findViewById(R.id.showInfo);
-        mapready = false;
+        mapready = false; //Map is not ready.
 
         in = getIntent();
         channel = (Channel)in.getSerializableExtra("filtered");
         p = in.getParcelableExtra("persister");
+
+        //For each item in the channel, which is the filtered list of elements which met the criteria received from search results.
         List<String> array = new ArrayList<>();
         for(Item i : channel.getItems()) {
+            //Create a date location string to display the item on the spinner.
             array.add(i.getOriginDate() + " - " + i.getLocation());
         }
+
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,R.layout.spin, array);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        selectRecord.setAdapter(adapter);
+        selectRecord.setAdapter(adapter); //Add the adapter to the spinner.
 
-        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapInfo);
-        mapFragment.getMapAsync(this);
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapInfo); //Get the map fragment.
+        mapFragment.getMapAsync(this); //Get the map async
 
         selectRecord.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            /**
+             * On the change of the spinner get the value of the selected item. It does this by when the item is changed
+             * Gets the item at position selected which should correspond to the id of the item in the filtered list.
+             * as they were populated sequentially.
+             * @param parent The adapter from which the item has been selected.
+             * @param view The view of the changed selection.
+             * @param position The position of the item selected.
+             * @param id The id of the item selected.
+             */
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                for (Item i : channel.getItems()) {
-                    if((i.getOriginDate() + " - " + i.getLocation()).equals(selectRecord.getSelectedItem().toString())) {
-                        selectedItem = i;
-                    }
-                }
-                origarea = new LatLng(selectedItem.getLat(),selectedItem.getLon());
+
+                selectedItem = channel.getItems().get(position);
+                origarea = new LatLng(selectedItem.getLat(),selectedItem.getLon()); //Create new lat long object for map pos.
+
+                //Create a new thread whcih when started runs the run.
                 Thread thread = new Thread() {
                     public void run() {
-                        while(!mapready) {
-                            try { Thread. sleep(2000); }
+                        while(!mapready) { //In this new thread if map is not ready loop
+                            try { Thread. sleep(2000); } //Make the thread sleep for 2 seconds.
                             catch (InterruptedException e) {
 
                             }
                         }
+
+                        //Once the map is ready it breaks the loop and runs a new runnable on the UI thread
                         runOnUiThread(new Runnable() {
+
+                            /**
+                             * Run method of runnable runs as the first point of the thread.
+                             */
                             @Override
                             public void run() {
+
+                                //Below must be ran on UI as maps maps and GUI changes must be made on the main user interface thread.
                                 mMap.clear();
                                 mMap.addMarker(new MarkerOptions().position(origarea).title("Earthquake on: " + selectedItem.getPubDate().toString()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                                 mMap.moveCamera(CameraUpdateFactory.zoomTo(Float.parseFloat("12.0")));
@@ -118,12 +146,13 @@ public class SearchResults extends AppCompatActivity implements OnMapReadyCallba
                     }
                 };
 
-                thread.start();
+                thread.start(); //Start the thread.
 
-                TextView title = findViewById(R.id.title);
-                title.setText(getResources().getString(R.string.title,selectedItem.getTitle()));
-                title.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                title.setTextSize(TypedValue.COMPLEX_UNIT_DIP,20);
+                //All the below sets the text view for the relevant piece of information to the value of the selected item. Commenting top block to show structure but rest are the same.
+                TextView title = findViewById(R.id.title); //Connect the gui element to java.
+                title.setText(getResources().getString(R.string.title,selectedItem.getTitle()));    //Set the text of the view to the string resource using formatting for the parameters.
+                title.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)); //Set the layout parameters for the view.
+                title.setTextSize(TypedValue.COMPLEX_UNIT_DIP,20); //Set the text size of the view to 20dp for readability.
 
                 TextView link = findViewById(R.id.link);
                 link.setText(getResources().getString(R.string.link,selectedItem.getLink()));
@@ -166,6 +195,10 @@ public class SearchResults extends AppCompatActivity implements OnMapReadyCallba
                 dep.setTextSize(TypedValue.COMPLEX_UNIT_DIP,20);
             }
 
+            /**
+             * Required as part of interface but not used as something will always be selected.
+             * @param parent The parent adapter the item was selected from.
+             */
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -175,6 +208,12 @@ public class SearchResults extends AppCompatActivity implements OnMapReadyCallba
         backButton = findViewById(R.id.back);
 
         backButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * The onclicklistener interface defines that the onclick event must be defined. This is done
+             * anonymously so is used to define what happens when the above view is clicked.
+             * @param v The view from which the on click event was called. Not necessary as this is
+             *          anonymous and only relevant to the view above.
+             */
             @Override
             public void onClick(View v) {
                 in = new Intent(SearchResults.this,ListDataActivity.class);
@@ -183,29 +222,42 @@ public class SearchResults extends AppCompatActivity implements OnMapReadyCallba
             }
         });
 
-        rec = new SearchResults.MyReceiver();
-        ifi = new IntentFilter("com.example.mcintee_michael_s1515941.RefreshData");
-        registerReceiver(rec,ifi);
+        rec = new SearchResults.MyReceiver(); //Create new receiver to receive broadcasts from service.
+        ifi = new IntentFilter("com.example.mcintee_michael_s1515941.RefreshData"); //Intent filter for channel specified.
+        registerReceiver(rec,ifi); //Register the receiver to receive broadcasts from intent filter.
     }
 
+    /**
+     * The on pause event which is part of the activity lifecycle. This is run when the user deviates
+     * from the activity through a push of the home button etc.
+     */
     @Override
     public void onPause() {
         super.onPause();
-        unregisterReceiver(rec);
+        unregisterReceiver(rec); //Unregister the receiver so the messages aren't received when the user is not in the app.
     }
 
+    /**
+     * Must be implemented as part of on map callback this is called when the map is loaded and ready
+     * to go.
+     * @param googleMap The googlemap which is ready to be applied to the map fragment.
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-        mMap = googleMap;
-        mapready = true;
+        mMap = googleMap; //Set the map fragment to the ready googlemap.
+        mapready = true; //Inform the second thread that the map is ready and changes can be made to it.
 
     }
 
+    /**
+     * The on resume event which is part of the activity lifecycle. This is run when the user resumes from
+     * a pause likes going back in to the app after coming out of it.
+     */
     @Override
     public void onResume() {
         super.onResume();
-        registerReceiver(rec,ifi);
+        registerReceiver(rec,ifi); //Re-register the receiver to start picking up messages again for data updates.
     }
 
     /**
