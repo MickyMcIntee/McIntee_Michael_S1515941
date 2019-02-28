@@ -16,7 +16,7 @@
     <string name="refresh">Refreshing List Contents...&#160;</string>
     <string name="dateerror">Sorry, it looks like you\'re missing a to or from date.</string>
     <string name="nodata">Sorry, it looks like there\'s nothing for this range.</string>
-    <string name="selectid">Selected ID: %d&#160;</string>
+    <string name="selectid">Selected ID:&#160;</string>
     <string name="location">Location: %s&#160;</string>
     <string name="title">Title: %s&#160;</string>
     <string name="category">Category: %s&#160;</string>

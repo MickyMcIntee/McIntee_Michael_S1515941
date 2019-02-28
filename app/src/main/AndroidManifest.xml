@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.mcintee_michael_s1515941">
+    package="com.mcintech.mcintee_michael_s1515941">
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".SearchResults"/>
+        <activity android:name="com.mcintech.mcintee_michael_s1515941.SearchResults"/>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
@@ -21,11 +21,11 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
         <activity
-            android:name=".MapActivity"
+            android:name="com.mcintech.mcintee_michael_s1515941.MapActivity"
             android:label="@string/title_activity_map" />
-        <activity android:name=".InfoActivity" />
-        <activity android:name=".ListDataActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name="com.mcintech.mcintee_michael_s1515941.InfoActivity" />
+        <activity android:name="com.mcintech.mcintee_michael_s1515941.ListDataActivity" />
+        <activity android:name="com.mcintech.mcintee_michael_s1515941.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -34,6 +34,6 @@
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
-        <service android:name=".Reloader"></service>
+        <service android:name="com.mcintech.mcintee_michael_s1515941.Reloader"></service>
     </application>
 </manifest>

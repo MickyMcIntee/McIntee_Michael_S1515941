@@ -1,14 +1,23 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'Key0'
+            keyPassword 'AWAR777b*'
+            storeFile file('/Users/michaelmcintee/mykey.kst')
+            storePassword 'AWAR777b*'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.example.mcintee_michael_s1515941"
+        applicationId "com.mcintech.mcintee_michael_s1515941"
         minSdkVersion 23
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.config
     }
     buildTypes {
         release {
@@ -16,10 +25,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    productFlavors {
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:mediarouter-v7:28.0.0'
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.android.support:appcompat-v7:28.0.0'
